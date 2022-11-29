@@ -5,17 +5,32 @@ public class Venta {
 	private double cantidad;
 	private boolean tarjeta;
 	private double precio;
+    private int id;
 
 
-
-	public Venta(Cafe cafe, double cantidad, boolean tarjeta, double precio) {
+	public Venta(Cafe cafe, double cantidad, boolean tarjeta, double precio, int id) {
 		super();
 		this.cafe = cafe;
 		this.cantidad = cantidad;
 		this.tarjeta = tarjeta;
 		this.precio = precio;
+		this.id = 0;
 	}
 	
+
+
+
+	public int getId() {
+		return id;
+	}
+
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 
 
 
@@ -78,9 +93,9 @@ public class Venta {
 	@Override
 	public String toString() {
 		if(tarjeta) {
-			return " Cafe: " + cafe.getNombre() + "\ncantidad: " + cantidad + "\nPosee descuento por tarjeta socio "+ "\nTotal"+ precio;
+			return "\nCafe: " + cafe.getNombre() + "\ncantidad: " + cantidad + "\nCon descuento"+ "\nTotal"+ precio + "\nId: " + id + " - - ";
 		}else {
-			return " Cafe " + cafe.getNombre() + "\ncantidad: " + cantidad + "\nNo posee descuento por tarjeta socio"+ "\nTotal"+precio;
+			return "\nCafe " + cafe.getNombre() + "\ncantidad: " + cantidad + "\nSin descuento "+ "\nTotal: "+precio+"\nId: " + id + " - - ";
 		}
 		
 	}

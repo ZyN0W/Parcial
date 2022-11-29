@@ -17,45 +17,99 @@ public class Main {
 		cafes.add(lagrima);
 		cafes.add(expresso);
 		LinkedList<Venta> Ventas = new LinkedList <Venta>();
-		
-		int salir,nroVenta=0;
-	
+		int cerrar;
+		//para probar es mejor comentar la linea de la 21 a 25
+		System.out.println("id =  2022 contra = 1010");
+		JOptionPane.showMessageDialog(null, "Bienvenido, Registrese");
+		IngresoEncargado();
+		JOptionPane.showMessageDialog(null, "Ya puede operar");
+		RealizarVenta(cafes,Ventas);
+		JOptionPane.showMessageDialog(null, "Caja cerrada");
 		do {
-			System.out.println(nroVenta);
-			nroVenta ++;
-			RealizarVenta(cafes,Ventas,nroVenta);
+			
+			int op = Integer.parseInt(JOptionPane.showInputDialog("Las opciones sobre revision de ventas son las siguientes \n1-Ver todas las ventas"
+					+ "\n2-Ventas con descuento \n3-Recaudacion total \n4-Cafe mas vendido \n5-Eliminar venta erronea"));
+			switch (op) {
+			case 1:
+				MostrarVentas(Ventas);
+				break;
+             case 2:
+            	 VentasDesc( Ventas);
+				break;
+             case 3:
+ 				Recaudacion(Ventas);
+ 				break;
+             case 4:
+ 				CafeVendido(Ventas,cafes);
+ 				break;
+             case 5:
+ 				Remove(Ventas);
+ 				break;
+
+
+			default:
+				break;
+			}
+			
+			cerrar=Integer.parseInt(JOptionPane.showInputDialog("Otra operacion? \n1-Si \n2-No"));
+			
+			
+		} while (cerrar==1);
+	
+	    
 			
 	
 			
-			salir=Integer.parseInt(JOptionPane.showInputDialog("Si desea salir pulse 1 \nSi desea continuar pusle cualquier numero"));
-		} while (salir==1);
-		
-		CafeVendido(Ventas,cafes);
-		
 		
 
 	}
+	public static void  IngresoEncargado(  ) {
+		//id =  2022 contra = 1010
+		int exitoso=0; // ingreso exitoso
+		String nom;
+		int id, con;
+		nom=JOptionPane.showInputDialog("Ingrese su nombre");
+		Encargado e1 = new Encargado (nom);		
+		do {	
+		 id = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su id"));
+		 con = Integer.parseInt(JOptionPane.showInputDialog("Ingrese su Clave"));
+			
+				
+			if (id== e1.getId() && con == e1.getContra()) {
+
+		JOptionPane.showMessageDialog(null, "Usuario: " + e1.getNombre() + " Ingreso correctamente ");
+				exitoso = 0;				
+			}else if (id != e1.getId() ) {
+				JOptionPane.showInputDialog("Id Incorrecto, ingreseselo otra vez ");
+				exitoso = 1;
+			}else if (con != e1.getContra()) {				
+				JOptionPane.showInputDialog("Contra Incorrecta, ingresesela otra vez ");
+				exitoso = 1;
+			}									
+		} while ( exitoso == 1);
+	}
 	
-	public static void RealizarVenta (LinkedList<Cafe> cafes, LinkedList<Venta> Ventas, int nroVenta ) {
+	public static void RealizarVenta (LinkedList<Cafe> cafes, LinkedList<Venta> Ventas) {
 		
-		int op, cant, op1=0;
+		int op, cant, op1=0, salir, nroVenta=0;
 		double precio;
-		
+		do {
+			System.out.println(nroVenta);
+			nroVenta ++;
 		op=Integer.parseInt(JOptionPane.showInputDialog("Bienvenido! Que cafe desea llevar ? "+"\n1-Latte"+"\n2-Flat White" +"\n3-Lagrima"+"\n4-Expresso"));
 		op= op-1;
 		cant=Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad"));
 		precio=(cafes.get(op).getPrecio()*cant);
 		op1=Integer.parseInt(JOptionPane.showInputDialog("Posee tarjeta de socio ?"+"\n1-Si"+"\n2-No"));
 		if(op1==1) {
-			precio=(cafes.get(op).getPrecio()*0.85);
-			Ventas.add(new Venta(cafes.get(op),cant,true,precio));	
+			precio=((cafes.get(op).getPrecio()*cant)*0.85);
+			Ventas.add(new Venta(cafes.get(op),cant,true,precio,nroVenta));	
 		}else {		
-			Ventas.add(new Venta(cafes.get(op),cant,false,precio));		
+			Ventas.add(new Venta(cafes.get(op),cant,false,precio,nroVenta));		
 		}
-		
-		
-		
-		
+		salir=Integer.parseInt(JOptionPane.showInputDialog("Si desea seguir pulse 1 \nPara salir pusle cualquier numero"));
+		} while (salir==1);
+										
 		
 	}
 	
@@ -63,12 +117,12 @@ public class Main {
 		if (Ventas.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No hubo ventas");
 		}else {
-			for (Venta venta : Ventas) {
-				JOptionPane.showMessageDialog(null, Ventas);
+			JOptionPane.showMessageDialog(null, Ventas);
+				
 			}
 		}
 		
-	}
+	
 	
 	public static void VentasDesc(LinkedList<Venta> Ventas) {
 		LinkedList<Venta> VentasDesc = new LinkedList <Venta>();
@@ -96,36 +150,50 @@ public class Main {
 
 
 public static void CafeVendido(LinkedList<Venta> Ventas, LinkedList<Cafe> cafes ) {
-	int latte=0, fw=0,lagrima=0,expreso=0;
+	
 	 
 	for (Venta venta : Ventas) {
 		if(venta.getCafe().getId()==1) {
-			latte+=venta.getCantidad();			
+			cafes.get(0).setCant_total(cafes.get(0).getCant_total()+venta.getCantidad());	
 			
 		}else if(venta.getCafe().getId()==2){
-			fw+=venta.getCantidad();
+			cafes.get(1).setCant_total(cafes.get(1).getCant_total()+venta.getCantidad());
 		
 		}else if(venta.getCafe().getId()==3){
-			lagrima+=venta.getCantidad();
+			cafes.get(2).setCant_total(cafes.get(2).getCant_total()+venta.getCantidad());
 			
 		}else if(venta.getCafe().getId()==4){
-			expreso+=venta.getCantidad();
+			cafes.get(3).setCant_total(cafes.get(3).getCant_total()+venta.getCantidad());
 			
 		}
 		
 	}
 	
-	List<Integer> maximos=Arrays.asList(latte,fw,lagrima,expreso);
+	Comparator <Cafe> MaximoVendido = Comparator.comparing(Cafe::getCant_total);
+    Collections.sort(cafes, MaximoVendido.reversed());
+    JOptionPane.showMessageDialog(null, "El cafe mas vendido fue el siguiente: " + cafes.get(0).getNombre() + "\n Con un total de: " + cafes.get(0).getCant_total() + " Unidades vendidas");
 	
-	 
-	Collections.sort(maximos);
-	JOptionPane.showMessageDialog(null, "El mas vendido es: "+  "Con la cantidad de: " + maximos.get(3) );
 	
-
+}
+public static void Remove(LinkedList<Venta> Ventas) {
+	MostrarVentas(Ventas);
+	int borrar ;
+	borrar=Integer.parseInt(JOptionPane.showInputDialog("Seleccion el ID de la venta a eliminar"));
+	for (Venta venta : Ventas) {
+		if (Ventas.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "No hubo ventas");
+		} else if (venta.getId()==borrar) { 				
+			Ventas.remove(Ventas.indexOf(venta));
+			JOptionPane.showMessageDialog(null, "Se removio la venta ID "+borrar+ " correctamente" );
+		}
+		
+	}
+	
 	
 	
 }
 
-	
 }
+	
+
 
